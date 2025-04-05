@@ -39,7 +39,6 @@ public class CustomRegisteredClientRepository implements RegisteredClientReposit
             return null;
         }
 
-
         return RegisteredClient.withId(client.getId().toString())
                 .clientId(client.getClientId())
                 .clientSecret(client.getClientSecret())
