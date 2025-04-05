@@ -20,6 +20,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
+import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -49,12 +51,8 @@ public class SecutiryConfiguration {
                     oauth2.loginPage("/login");
                     oauth2.successHandler(loginSocialSuccessHandle);
                 })
+                .oauth2ResourceServer(oauthRs -> oauthRs.jwt(Customizer.withDefaults()))
                 .build();
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder(){
-        return new BCryptPasswordEncoder(10);
     }
 
     //@Bean
@@ -67,6 +65,18 @@ public class SecutiryConfiguration {
 //        return new GrantedAuthorityDefaults("ROLE_");
 //        return new GrantedAuthorityDefaults("GRUPO_");
         return new GrantedAuthorityDefaults("");
+    }
+
+    @Bean
+    public JwtAuthenticationConverter jwtAuthenticationConverter(){
+
+        var jwt = new JwtGrantedAuthoritiesConverter();
+        jwt.setAuthorityPrefix("");
+
+        var converter =  new JwtAuthenticationConverter();
+        converter.setJwtGrantedAuthoritiesConverter(jwt);
+
+        return converter;
     }
 
 }
