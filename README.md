@@ -117,6 +117,48 @@ Ele vai servir para settar os clients no repository personalizado, primeiro faz 
 
 O [JWT](https://jwt.is/) é um formato compacto e seguro para transmitir informações entre duas partes como um token de autenticação, tudo codificado em JSON e assinado digitalmente. Um JWT é uma string dividida em 3 partes, separadas por ponto, a primeira parte chamada de hearder, indica o tipo de token e o algoritmo usado na assinatura, A segunda parte chama-se playload onde contém as informações (claims), como o nome do usuário, roles, tempo de expiração etc, e por fim o signature é a assinatura digital do token. Garante que o token não foi alterado.
 
+Vamos agora implementar dois metodos que vai servi para criptografar e decodar:
+
+
+
+![imagem local](imagem_readme/configuração/classe_AuthorizationServerConfiguration_Bean_jwksorce.png)
+
+
+
+Este primeiro metodo serve para criptografar, ele é anotado com @Bean e precisa de uma chave RSA que básicamente é uma chave de criptografia pública. E tem um metodo auxiliar que serve para criar essa chave RSA.
+
+
+Agora iremos gerar um token via postman, primeiro iremos acessar a uma ferramenta chamada de [Hearder Generator](https://www.debugbear.com/basic-auth-header-generator), a partir do nosso login e senha do client ele gera um Basic auth.
+
+
+![imagem local](/imagem_readme/bowser/header_generator.png)
+
+
+Proximo passo no nosso Postman, na aba hearders, iremos adicionar a um key authorization e o valor com nosso codigo auth gerado, a url precisa ser a sua url padrão + /oauth2/token:
+
+
+![imagem local](/imagem_readme/postman/hearders_com_codigo.png)
+
+
+
+O proximo passo é adicionar uma key para grant type e outra para scopo, e fazer um POST:
+
+
+![imagem local](/imagem_readme/postman/token_gerado.png)
+
+
+
+Com o token gerado estamos autenticados, na aba authorization com a opção no auth, seguindo para hearders no authorization para colocar o codigo, colocar a palavra bearer e o token gerado pelo postman:
+
+
+
+![imagem local](/imagem_readme/postman/GET_com_token_gerado.png)
+
+
+
+
+
+
 
 
 
