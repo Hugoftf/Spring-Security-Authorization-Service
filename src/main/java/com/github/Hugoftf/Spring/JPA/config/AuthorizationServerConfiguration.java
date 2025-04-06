@@ -1,5 +1,10 @@
 package com.github.Hugoftf.Spring.JPA.config;
 
+import com.nimbusds.jose.jwk.JWKSet;
+import com.nimbusds.jose.jwk.RSAKey;
+import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
+import com.nimbusds.jose.jwk.source.JWKSource;
+import com.nimbusds.jose.proc.SecurityContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -16,7 +21,12 @@ import org.springframework.security.oauth2.server.authorization.settings.OAuth2T
 import org.springframework.security.oauth2.server.authorization.settings.TokenSettings;
 import org.springframework.security.web.SecurityFilterChain;
 
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.interfaces.RSAPrivateKey;
+import java.security.interfaces.RSAPublicKey;
 import java.time.Duration;
+import java.util.UUID;
 
 @Configuration
 @EnableWebSecurity
@@ -25,6 +35,7 @@ public class AuthorizationServerConfiguration {
     @Bean
     @Order(1)
     public SecurityFilterChain authServerSecurityFilterChain(HttpSecurity http) throws Exception{
+
         OAuth2AuthorizationServerConfiguration.applyDefaultSecurity(http);
 
         http.getConfigurer(OAuth2AuthorizationServerConfigurer.class)
@@ -56,5 +67,29 @@ public class AuthorizationServerConfiguration {
         return ClientSettings.builder()
                 .requireAuthorizationConsent(false)
                 .build();
+    }
+
+    @Bean
+    public JWKSource<SecurityContext> jwkSource() throws Exception {
+        RSAKey rsakey = gerarChaveRSA();
+        JWKSet jwkSet = new JWKSet(rsakey);
+
+        return new ImmutableJWKSet<>(jwkSet);
+    }
+
+    private RSAKey gerarChaveRSA() throws Exception {
+        KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
+        keyPairGenerator.initialize(2048);
+        KeyPair keyPair = keyPairGenerator.generateKeyPair();
+
+        RSAPublicKey chavePublica = (RSAPublicKey) keyPair.getPublic();
+        RSAPrivateKey chavePrivada = (RSAPrivateKey) keyPair.getPrivate();
+
+        return new RSAKey.Builder(chavePublica)
+                .privateKey(chavePrivada)
+                .keyID(UUID.randomUUID().toString())
+                .build();
+
+
     }
 }
