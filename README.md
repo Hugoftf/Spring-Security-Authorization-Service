@@ -8,6 +8,7 @@
   - [Sobre](#Sobre)
   - [Inicio](#Inicio)
   - [Configuração](#Configuração)
+  - [JWT](#JWT)
     
 
   
@@ -111,7 +112,10 @@ Ela pede que você sobrescreva tres metodos, por hora iremos apenas implementar 
 Ele vai servir para settar os clients no repository personalizado, primeiro faz uma validação se é nullo ou não, logo em seguida, adiciona ao repository com as configurações personalizados de token, etc.
 
 
-#### JWT
+## JWT
+
+
+O [JWT](https://jwt.is/) é um formato compacto e seguro para transmitir informações entre duas partes como um token de autenticação, tudo codificado em JSON e assinado digitalmente. Um JWT é uma string dividida em 3 partes, separadas por ponto, a primeira parte chamada de hearder, indica o tipo de token e o algoritmo usado na assinatura, A segunda parte chama-se playload onde contém as informações (claims), como o nome do usuário, roles, tempo de expiração etc, e por fim o signature é a assinatura digital do token. Garante que o token não foi alterado.
 
 
 
