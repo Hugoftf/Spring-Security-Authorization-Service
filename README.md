@@ -72,8 +72,46 @@ Depois do retorno do codigo created, iremos checar no nosso Postgres:
 
 
 
-### Configuração
+## Configuração
 
+
+#### Criando Repositorio de Clients e Habilitando Authorization Server
+
+
+A começar criando a classe AuthorizationServerConfiguration para habilitar e configurar o Authorization Server:
+
+
+![imagem local](imagem_readme/configuração/classe_AuthorizationServerConfiguration_metodo_SecurityFilterChain_server.png)
+
+
+
+O metodo do SecurityFilterChain já habilita as o Authorization Server. Ele tem a anotação @Order que serve para definir a orderm de aplição, em conjunto conjunto com algumas aplicações padrões no corpo do metodo.
+
+Seguindo para as configurações de token personalizadas, onde você define tempo maximo de exeução, formato do token, concentimento na hora de se autenticar, etc:
+
+
+![imagem local](imagem_readme/configuração/classe_AuthorizationServerConfiguration_metodo_auxiliar_configuration.png)
+
+
+Agora a criação do CustomResgiteredCLientRepository, a criação do repositorio de clientes:]
+
+
+
+![imagem local](imagem_readme/Security/classe_CustomRegisteredClientRepository.png)
+
+
+
+Ela pede que você sobrescreva tres metodos, por hora iremos apenas implementar o findByCLientId:
+
+
+![imagem local](/imagem_readme/Security/classe_CustomRegisteredClientRepository_metodos_findByClientID.png)
+
+
+
+Ele vai servir para settar os clients no repository personalizado, primeiro faz uma validação se é nullo ou não, logo em seguida, adiciona ao repository com as configurações personalizados de token, etc.
+
+
+#### JWT
 
 
 
