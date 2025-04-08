@@ -1,6 +1,7 @@
 package com.github.Hugoftf.Spring.JPA.config;
 
 import com.github.Hugoftf.Spring.JPA.security.CustomUserDetailsService;
+import com.github.Hugoftf.Spring.JPA.security.JWTCustomAuthentionFilter;
 import com.github.Hugoftf.Spring.JPA.security.LoginSocialSuccessHandle;
 import com.github.Hugoftf.Spring.JPA.service.UsuarioService;
 import org.springframework.context.annotation.Bean;
@@ -22,6 +23,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
+import org.springframework.security.oauth2.server.resource.web.authentication.BearerTokenAuthenticationFilter;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -33,7 +35,8 @@ public class SecutiryConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(
             HttpSecurity http,
-            LoginSocialSuccessHandle loginSocialSuccessHandle) throws Exception{
+            LoginSocialSuccessHandle loginSocialSuccessHandle,
+            JWTCustomAuthentionFilter jwtCustomAuthentionFilter) throws Exception{
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .formLogin(configurer ->{
@@ -52,6 +55,7 @@ public class SecutiryConfiguration {
                     oauth2.successHandler(loginSocialSuccessHandle);
                 })
                 .oauth2ResourceServer(oauthRs -> oauthRs.jwt(Customizer.withDefaults()))
+                .addFilterAfter(jwtCustomAuthentionFilter, BearerTokenAuthenticationFilter.class)
                 .build();
     }
 
