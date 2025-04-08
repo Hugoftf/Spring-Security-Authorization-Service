@@ -17,6 +17,7 @@ import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.server.authorization.OAuth2Authorization;
 import org.springframework.security.oauth2.server.authorization.config.annotation.web.configuration.OAuth2AuthorizationServerConfiguration;
 import org.springframework.security.oauth2.server.authorization.config.annotation.web.configurers.OAuth2AuthorizationServerConfigurer;
+import org.springframework.security.oauth2.server.authorization.settings.AuthorizationServerSettings;
 import org.springframework.security.oauth2.server.authorization.settings.ClientSettings;
 import org.springframework.security.oauth2.server.authorization.settings.OAuth2TokenFormat;
 import org.springframework.security.oauth2.server.authorization.settings.TokenSettings;
@@ -70,6 +71,27 @@ public class AuthorizationServerConfiguration {
     public ClientSettings clientSettings(){
         return ClientSettings.builder()
                 .requireAuthorizationConsent(false)
+                .build();
+    }
+
+
+    @Bean
+    public AuthorizationServerSettings authorizationServerSettings(){
+        return AuthorizationServerSettings.builder()
+                // obter token
+                .tokenEndpoint("/oauth2/token")
+                // para consultar status do token
+                .tokenIntrospectionEndpoint("/oauth2/introspect")
+                // revogar
+                .tokenRevocationEndpoint("/oauth2/revoke")
+                // authorization endpoint
+                .authorizationEndpoint("/oauth2/authorize")
+                // informações do usuario "open id connect"
+                .oidcUserInfoEndpoint("/oauth2/userinfo")
+                // obter a chave publica pra verificar a assiantura do token
+                .jwkSetEndpoint("/oauth2/jwks")
+                // logout
+                .oidcLogoutEndpoint("/oauth2/logout")
                 .build();
     }
 
